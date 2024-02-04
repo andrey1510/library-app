@@ -1,6 +1,10 @@
 package com.libraryapp.controllers;
 
-import com.libraryapp.exceptions.BookNotLentException;
+import com.libraryapp.exceptions.BookAlreadyLentToClientException;
+import com.libraryapp.exceptions.BookNotFoundException;
+import com.libraryapp.exceptions.BookNotLentToAnyoneException;
+import com.libraryapp.exceptions.BookNotLentToClientException;
+import com.libraryapp.exceptions.ClientNotFoundException;
 import com.libraryapp.exceptions.MaximumCopiesLentException;
 import com.libraryapp.exceptions.NoBooksInLibraryException;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequiredArgsConstructor
 public class ControllersExceptionsHandler {
 
-    @ExceptionHandler(BookNotLentException.class)
+    @ExceptionHandler(BookNotLentToAnyoneException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorResponse handleBookNotLentException(BookNotLentException ex) {
+    public ErrorResponse handleBookNotLentException(BookNotLentToAnyoneException ex) {
         return new ErrorResponse(ex.getMessage());
     }
 
@@ -38,6 +42,33 @@ public class ControllersExceptionsHandler {
         return new ErrorResponse(ex.getMessage());
     }
 
+    @ExceptionHandler(BookNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorResponse handleBookNotFoundException(BookNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorResponse handleClientNotFoundException(ClientNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ExceptionHandler(BookAlreadyLentToClientException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse handleBookAlreadyLentToClientException(BookAlreadyLentToClientException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    @ExceptionHandler(BookNotLentToClientException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse handleBookNotLentToClientException(BookNotLentToClientException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
 
 
     @AllArgsConstructor

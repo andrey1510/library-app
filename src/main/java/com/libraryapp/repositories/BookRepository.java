@@ -2,6 +2,7 @@ package com.libraryapp.repositories;
 
 import com.libraryapp.entities.Book;
 import com.libraryapp.entities.Client;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,12 +18,14 @@ public interface BookRepository extends JpaRepository<Book, String> {
             "c.libraryCard, " +
             "c.fullName " +
             "from " +
-            "BookLending l " +
+            "LendingRecord l " +
             "left join Client c on l.client.libraryCard = c.libraryCard " +
             "left join Book b on l.book.isbn = b.isbn " +
             "where b.isbn = :isbn " +
             "order by " +
             "c.fullName asc ")
     List<Client> getClientsByBookIsbn(@Param("isbn") String isbn);
+//
+//    Book findByIsbn(String isbn);
 
 }

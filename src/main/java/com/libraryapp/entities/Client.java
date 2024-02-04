@@ -19,6 +19,7 @@ import java.util.Set;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -45,5 +46,10 @@ public class Client {
     private String fullName;
 
     @OneToMany(mappedBy = "client", cascade = {CascadeType.ALL})
-    private Set<BookLending> bookLendings = new HashSet<>();
+    private Set<LendingRecord> lendingRecords = new HashSet<>();
+
+    public Client(String libraryCard, String fullName) {
+        this.libraryCard = libraryCard;
+        this.fullName = fullName;
+    }
 }

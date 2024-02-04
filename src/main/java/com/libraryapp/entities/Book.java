@@ -8,19 +8,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DialectOverride;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -54,21 +54,28 @@ public class Book {
             description = "Название книги.")
     private String title;
 
-    @NotBlank
+    @NotNull
     @Column(name = "publication_date", nullable = false)
     @Schema(requiredMode = REQUIRED,
             example = "01.08.2022",
             description = "ФИО клиента.")
     private Date publicationDate;
 
-    @NotBlank
-    @Column(name = "max_copies_number", columnDefinition = "integer default 3")
+    @Column(name = "max_copies", columnDefinition = "integer default 3")
     @Schema(requiredMode = REQUIRED,
             example = "1",
             description = "Максимальное количество копий книги, которое можно выдавать.")
-    private int maxCopiesNumber;
+    private int maxCopies;
 
     @OneToMany(mappedBy = "book", cascade = {CascadeType.ALL})
-    private Set<BookLending> bookLendings = new HashSet<>();
+    private Set<LendingRecord> lendingRecords = new HashSet<>();
 
+
+    public Book(String isbn, String author, String title, Date publicationDate, int maxCopies) {
+        this.isbn = isbn;
+        this.author = author;
+        this.title = title;
+        this.publicationDate = publicationDate;
+        this.maxCopies = maxCopies;
+    }
 }

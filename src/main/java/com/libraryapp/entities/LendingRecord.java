@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +23,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,13 +32,13 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity
 @Table(name = "book_lending")
-public class BookLending {
+public class LendingRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    UUID id;
+    Long id;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name="isbn")
@@ -50,4 +53,16 @@ public class BookLending {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp issuanceTimestamp;
 
+    @NotBlank
+    @Column(name = "max_copies", columnDefinition = "integer default 30")
+    @Schema(requiredMode = REQUIRED,
+            example = "10",
+            description = "Количество дней, на которое выдается книга.")
+    private int maxCopies;
+
+
+    public LendingRecord(Book book, Client client) {
+        this.book = book;
+        this.client = client;
+    }
 }
