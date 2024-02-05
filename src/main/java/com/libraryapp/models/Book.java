@@ -60,13 +60,13 @@ public class Book {
             description = "ФИО клиента.")
     private Date publicationDate;
 
-    @Column(name = "max_copies", columnDefinition = "integer default 3")
+    @Column(name = "max_copies")
     @Schema(requiredMode = REQUIRED,
             example = "1",
             description = "Максимальное количество копий книги, которое можно выдавать.")
     private int maxCopies;
 
-    @Column(name = "max_copies", columnDefinition = "integer default 0")
+    @Column(name = "max_copies")
     @Schema(requiredMode = REQUIRED,
             example = "1",
             description = "Максимальное выданных клиентам копий книги.")

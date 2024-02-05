@@ -52,11 +52,11 @@ public class LendingRecord {
     private Timestamp issuanceTimestamp;
 
     @NotBlank
-    @Column(name = "max_copies", columnDefinition = "integer default 30")
+    @Column(name = "lending_term")
     @Schema(requiredMode = REQUIRED,
             example = "10",
             description = "Количество дней, на которое выдается книга.")
-    private int maxCopies;
+    private int lendingTerm;
 
 
     public LendingRecord(Book book, Client client) {
