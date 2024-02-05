@@ -1,8 +1,10 @@
 package com.libraryapp.controllers;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.LendingRecord;
-import com.libraryapp.entities.Client;
+import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.exceptions.MaximumCopiesLentException;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.LendingRecord;
+import com.libraryapp.models.Client;
 import com.libraryapp.exceptions.BookAlreadyLentToClientException;
 import com.libraryapp.exceptions.BookNotFoundException;
 import com.libraryapp.exceptions.BookNotLentToAnyoneException;
@@ -30,7 +32,7 @@ public class LendingController {
 
     private static final String BOOK_NOT_LENT_TO_ANYONE = "В настоящее время книга с таким ISBN не выдана какому-либо клиенту.";
     private static final String BOOK_NOT_LENT_TO_CLIENT = "Книга с таким ISBN не выдана этому клиенту.";
-    private static final String BOOK_ALREADY_LENT_CLIENT = "Книга с таким ISBN уже выдана этому клиенту.";
+    private static final String BOOK_ALREADY_LENT_TO_CLIENT = "Книга с таким ISBN уже выдана этому клиенту.";
     private static final String MAXIMUM_COPIES_LENT = "Превышено максимальное количество выданных копий книги.";
     private static final String NO_BOOKS_IN_LIBRARY = "В библиотеке не зарегистрировано ни одной книги.";
     private static final String BOOK_NOT_FOUND = "В библиотеке не зарегистрирована книга с таким ISBN.";
@@ -54,9 +56,9 @@ public class LendingController {
 
     @GetMapping("clients/{isbn}")
     @Operation(description = "Показать клиентов, которым была выдана книга с определенным ISBN.")
-    public List<Client> getClientsByBookIsbn(@PathVariable("isbn") String isbn){
+    public List<ClientDTO> getClientsByBookIsbn(@PathVariable("isbn") String isbn){
 
-        List<Client> clients = lendingService.getClientsByBookIsbn(isbn);
+        List<ClientDTO> clients = lendingService.getClientsByBookIsbn(isbn);
 
         if (clients.isEmpty()) {
             throw new BookNotLentToAnyoneException(BOOK_NOT_LENT_TO_ANYONE);
@@ -65,13 +67,11 @@ public class LendingController {
         return clients;
     }
 
-    @PostMapping("lend-book/{isbn}&{library-card}")
+    @PostMapping("lend-book/{isbn}/{library-card}")
     @Operation(description = "Выдать книгу клиенту.")
     public ResponseEntity<String> lendBook(
             @PathVariable("isbn") String isbn,
             @PathVariable("library-card") String libraryCard) {
-
-        //ToDO поиск по LendingRecord с таким ISBN, exception если превышен максимум копий
 
         Book book = lendingService.getBookByISBN(isbn)
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND));
@@ -79,17 +79,23 @@ public class LendingController {
                 .orElseThrow(() -> new ClientNotFoundException(CLIENT_NOT_FOUND));
 
         if (lendingService.getLendingRecordByIsbnAndLibraryCard(isbn, libraryCard).isPresent()) {
-            throw new BookAlreadyLentToClientException(BOOK_ALREADY_LENT_CLIENT);
+            throw new BookAlreadyLentToClientException(BOOK_ALREADY_LENT_TO_CLIENT);
         }
+
+        if(book.getMaxCopies() - book.getLentCopies() <= 0) {
+            throw new MaximumCopiesLentException(MAXIMUM_COPIES_LENT);
+        }
+
 
         LendingRecord lendingRecord = new LendingRecord(book, client);
 
         lendingService.createBookLending(lendingRecord);
+        lendingService.updateLentCopies(book.getLentCopies() + 1);
         return new ResponseEntity<>(lendingRecord.getBook().getIsbn(), HttpStatus.OK);
 
     }
 
-    @DeleteMapping("return-book/{isbn}&{library-card}")
+    @DeleteMapping("return-book/{isbn}/{library-card}")
     public ResponseEntity<String> returnBook(
             @PathVariable("isbn") String isbn,
             @PathVariable("library-card") String libraryCard) {

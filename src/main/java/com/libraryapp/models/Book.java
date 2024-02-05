@@ -1,4 +1,4 @@
-package com.libraryapp.entities;
+package com.libraryapp.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -31,8 +31,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @Table(name = "book")
 public class Book {
 
-    //ToDo
-    @NotBlank
+    @NotNull
     @Id
     @Column(name = "isbn", nullable = false)
     @Schema(requiredMode = REQUIRED,
@@ -40,14 +39,14 @@ public class Book {
             description = "ISBN книги.")
     private String isbn;
 
-    @NotBlank
+    @NotNull
     @Column(name = "author", nullable = false)
     @Schema(requiredMode = REQUIRED,
             example = "Булгаков Михаил Афанасьевич",
             description = "ФИО автора.")
     private String author;
 
-    @NotBlank
+    @NotNull
     @Column(name = "title", nullable = false)
     @Schema(requiredMode = REQUIRED,
             example = "Мастер и Маргарита",
@@ -67,15 +66,14 @@ public class Book {
             description = "Максимальное количество копий книги, которое можно выдавать.")
     private int maxCopies;
 
-    @OneToMany(mappedBy = "book", cascade = {CascadeType.ALL})
+    @Column(name = "max_copies", columnDefinition = "integer default 0")
+    @Schema(requiredMode = REQUIRED,
+            example = "1",
+            description = "Максимальное выданных клиентам копий книги.")
+    private int lentCopies;
+
+    @OneToMany(mappedBy = "book")
     private Set<LendingRecord> lendingRecords = new HashSet<>();
 
 
-    public Book(String isbn, String author, String title, Date publicationDate, int maxCopies) {
-        this.isbn = isbn;
-        this.author = author;
-        this.title = title;
-        this.publicationDate = publicationDate;
-        this.maxCopies = maxCopies;
-    }
 }

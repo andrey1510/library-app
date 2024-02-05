@@ -1,7 +1,7 @@
 package com.libraryapp.controllers;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.Client;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.Client;
 import com.libraryapp.services.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +21,18 @@ public class RegistrationController {
 
     @PostMapping("register_book")
     @Operation(description = "Зарегистрировать книгу в библиотеке.")
-    public ResponseEntity<Book> registerBook(@RequestBody Book book) {
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
 
-        registrationService.registerBook(book);
+        registrationService.createBook(book);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("register_client")
     @Operation(description = "Зарегистрировать клиента в библиотеке.")
-    public ResponseEntity<Client> registerClient(@RequestBody Client client) {
+    public ResponseEntity<Client> createClient(@RequestBody Client client) {
 
-        registrationService.registerClient(client);
+        registrationService.createClient(client);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

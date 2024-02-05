@@ -1,7 +1,7 @@
 package com.libraryapp.services;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.Client;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.Client;
 import com.libraryapp.repositories.BookRepository;
 import com.libraryapp.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,13 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     @Override
     @Transactional
-    public Book registerBook(Book book) {
+    public Book createBook(Book book) {
         return bookRepository.save(book);
     }
 
     @Override
     @Transactional
-    public Client registerClient(Client client) {
+    public Client createClient(Client client) {
         return clientRepository.save(client);
     }
 }

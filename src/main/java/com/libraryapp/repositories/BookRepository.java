@@ -1,15 +1,13 @@
 package com.libraryapp.repositories;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.Client;
-import jakarta.validation.constraints.NotBlank;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, String> {
@@ -28,4 +26,5 @@ public interface BookRepository extends JpaRepository<Book, String> {
 //
 //    Book findByIsbn(String isbn);
 
+    void updateBookByLentCopies(int lentCopies);
 }

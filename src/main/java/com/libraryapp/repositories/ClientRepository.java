@@ -1,6 +1,6 @@
 package com.libraryapp.repositories;
 
-import com.libraryapp.entities.Client;
+import com.libraryapp.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

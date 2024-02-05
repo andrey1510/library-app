@@ -1,8 +1,10 @@
 package com.libraryapp.services;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.LendingRecord;
-import com.libraryapp.entities.Client;
+import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.mappers.ClientMapper;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.LendingRecord;
+import com.libraryapp.models.Client;
 import com.libraryapp.repositories.LendingRecordRepository;
 import com.libraryapp.repositories.BookRepository;
 import com.libraryapp.repositories.ClientRepository;
@@ -12,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class LendingServiceImpl implements LendingService {
@@ -24,6 +26,8 @@ public class LendingServiceImpl implements LendingService {
     @Autowired
     private LendingRecordRepository lendingRecordRepository;
 
+    @Autowired
+    private ClientMapper clientMapper;
 
     //ToDo отрезать relations
     @Override
@@ -34,8 +38,13 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Client> getClientsByBookIsbn(String isbn) {
-        return bookRepository.getClientsByBookIsbn(isbn);
+    public List<ClientDTO> getClientsByBookIsbn(String isbn) {
+
+        List<Client> clientsByBookIsbn = bookRepository.getClientsByBookIsbn(isbn);
+
+        return clientsByBookIsbn.stream()
+                .map(clientMapper::clientToClientDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -65,6 +74,12 @@ public class LendingServiceImpl implements LendingService {
     @Transactional
     public void deleteById(Long id){
         lendingRecordRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateLentCopies(int lentCopies) {
+        bookRepository.updateBookByLentCopies(lentCopies);
     }
 
 }

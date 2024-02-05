@@ -1,7 +1,6 @@
-package com.libraryapp.entities;
+package com.libraryapp.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +20,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -36,21 +34,21 @@ public class LendingRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", nullable = false)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     Long id;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne()
     @JoinColumn(name="isbn")
     private Book book;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne()
     @JoinColumn(name="library_card")
     private Client client;
 
-    @Column(name = "timestamp", updatable = false, nullable = false)
+    @Column(name = "timestamp", nullable = false)
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Timestamp issuanceTimestamp;
 
     @NotBlank

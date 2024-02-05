@@ -1,19 +1,19 @@
 package com.libraryapp.services;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.LendingRecord;
-import com.libraryapp.entities.Client;
+import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.LendingRecord;
+import com.libraryapp.models.Client;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface LendingService {
 
     List<Book> getAllBooks();
 
-    List<Client> getClientsByBookIsbn(String isbn);
+    List<ClientDTO> getClientsByBookIsbn(String isbn);
 
     Optional<Book> getBookByISBN(String isbn);
 
@@ -28,4 +28,7 @@ public interface LendingService {
 
     @Transactional
     void deleteById(Long id);
+
+    @Transactional
+    void updateLentCopies(int lentCopies);
 }

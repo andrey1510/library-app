@@ -1,4 +1,4 @@
-package com.libraryapp.entities;
+package com.libraryapp.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -7,7 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,7 +30,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 public class Client {
 
     //ToDo
-    @NotBlank
+    @NotNull
     @Id
     @Column(name = "library_card", nullable = false)
     @Schema(requiredMode = REQUIRED,
@@ -38,18 +38,14 @@ public class Client {
             description = "Номер библиотечной карточки клиента.")
     private String libraryCard;
 
-    @NotBlank
+    @NotNull
     @Column(name = "full_name", nullable = false)
     @Schema(requiredMode = REQUIRED,
             example = "Петров Петр Петрович",
             description = "ФИО клиента.")
     private String fullName;
 
-    @OneToMany(mappedBy = "client", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "client")
     private Set<LendingRecord> lendingRecords = new HashSet<>();
 
-    public Client(String libraryCard, String fullName) {
-        this.libraryCard = libraryCard;
-        this.fullName = fullName;
-    }
 }

@@ -1,13 +1,13 @@
 package com.libraryapp.services;
 
-import com.libraryapp.entities.Book;
-import com.libraryapp.entities.Client;
+import com.libraryapp.models.Book;
+import com.libraryapp.models.Client;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface RegistrationService {
     @Transactional
-    Book registerBook(Book book);
+    Book createBook(Book book);
 
     @Transactional
-    Client registerClient(Client client);
+    Client createClient(Client client);
 }
