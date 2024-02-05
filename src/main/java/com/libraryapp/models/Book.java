@@ -60,16 +60,16 @@ public class Book {
             description = "ФИО клиента.")
     private Date publicationDate;
 
-    @Column(name = "max_copies")
+    @Column(name = "max_copies", columnDefinition = "integer default 10")
     @Schema(requiredMode = REQUIRED,
-            example = "1",
+            example = "10",
             description = "Максимальное количество копий книги, которое можно выдавать.")
     private int maxCopies;
 
-    @Column(name = "max_copies")
+    @Column(name = "lent_copies")
     @Schema(requiredMode = REQUIRED,
-            example = "1",
-            description = "Максимальное выданных клиентам копий книги.")
+            example = "0",
+            description = "Максимальное количество выданных клиентам копий книги.")
     private int lentCopies;
 
     @OneToMany(mappedBy = "book")

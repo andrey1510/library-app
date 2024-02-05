@@ -35,7 +35,6 @@ public class LendingRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     Long id;
 
     @ManyToOne()
@@ -48,19 +47,17 @@ public class LendingRecord {
 
     @Column(name = "timestamp", nullable = false)
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp issuanceTimestamp;
 
-    @NotBlank
-    @Column(name = "lending_term")
-    @Schema(requiredMode = REQUIRED,
-            example = "10",
-            description = "Количество дней, на которое выдается книга.")
-    private int lendingTerm;
+    @Column(name = "lending_term", columnDefinition = "integer default 30")
+    private Integer lendingTerm;
 
 
-    public LendingRecord(Book book, Client client) {
+    public LendingRecord(Book book, Client client, int lendingTerm) {
         this.book = book;
         this.client = client;
+        this.lendingTerm = lendingTerm;
     }
+
 }

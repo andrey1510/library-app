@@ -51,7 +51,7 @@ public class BookDTO {
     private int maxCopies;
 
     @Schema(requiredMode = REQUIRED,
-            example = "1",
+            example = "0",
             description = "Максимальное количество выданных клиентам копий книги.")
     private int lentCopies;
 

@@ -3,6 +3,7 @@ package com.libraryapp.repositories;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,5 +27,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
 //
 //    Book findByIsbn(String isbn);
 
-    void updateBookByLentCopies(int lentCopies);
+    @Modifying
+    @Query("update Book b set b.lentCopies = :lentCopies where b.isbn = (select b.isbn from Book b where b.isbn = :isbn)" )
+    void updateLentCopies(int lentCopies, String isbn);
 }

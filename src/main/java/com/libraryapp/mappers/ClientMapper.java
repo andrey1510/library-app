@@ -12,4 +12,7 @@ public interface ClientMapper {
     @Mapping(target = "fullName", source = "fullName")
     ClientDTO clientToClientDTO(Client client);
 
+    @Mapping(target = "libraryCard", source = "libraryCard")
+    @Mapping(target = "fullName", source = "fullName")
+    Client clientDTOToClient(ClientDTO clientDTO);
 }

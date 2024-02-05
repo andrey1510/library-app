@@ -1,5 +1,6 @@
 package com.libraryapp.services;
 
+import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.LendingRecord;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface LendingService {
 
-    List<Book> getAllBooks();
+    List<BookDTO> getAllBooks();
 
     List<ClientDTO> getClientsByBookIsbn(String isbn);
 
@@ -23,12 +24,12 @@ public interface LendingService {
     Optional<LendingRecord> getLendingRecordByIsbnAndLibraryCard(String isbn, String libraryCard);
 
     @Transactional
-    LendingRecord createBookLending(LendingRecord lendingRecord);
+    LendingRecord createLendingRecord(LendingRecord lendingRecord);
 
 
     @Transactional
     void deleteById(Long id);
 
     @Transactional
-    void updateLentCopies(int lentCopies);
+    void updateLentCopies(int lentCopies, String isbn);
 }

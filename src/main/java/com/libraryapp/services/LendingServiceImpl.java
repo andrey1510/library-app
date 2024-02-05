@@ -1,6 +1,8 @@
 package com.libraryapp.services;
 
+import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.mappers.BookMapper;
 import com.libraryapp.mappers.ClientMapper;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.LendingRecord;
@@ -28,12 +30,16 @@ public class LendingServiceImpl implements LendingService {
 
     @Autowired
     private ClientMapper clientMapper;
+    @Autowired
+    private BookMapper bookMapper;
 
-    //ToDo отрезать relations
+
     @Override
     @Transactional(readOnly = true)
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<BookDTO> getAllBooks() {
+        List<Book> allBooks = bookRepository.findAll();
+        return allBooks.stream().map(bookMapper::bookToBookDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -67,7 +73,7 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     @Transactional
-    public LendingRecord createBookLending(LendingRecord lendingRecord) {
+    public LendingRecord createLendingRecord(LendingRecord lendingRecord) {
         return lendingRecordRepository.save(lendingRecord);
     }
     @Override
@@ -78,8 +84,8 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     @Transactional
-    public void updateLentCopies(int lentCopies) {
-        bookRepository.updateBookByLentCopies(lentCopies);
+    public void updateLentCopies(int lentCopies, String isbn) {
+        bookRepository.updateLentCopies(lentCopies, isbn);
     }
 
 }
