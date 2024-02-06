@@ -3,8 +3,8 @@ package com.libraryapp.controllers;
 import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
 import com.libraryapp.dto.LendingRecordDTO;
-import com.libraryapp.exceptions.MaximumCopiesLentException;
-import com.libraryapp.mappers.LendingRecordMapper;
+import com.libraryapp.exceptions.NoCopiesLeftException;
+import com.libraryapp.messages.ReturnBookResponse;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.LendingRecord;
 import com.libraryapp.models.Client;
@@ -17,7 +17,6 @@ import com.libraryapp.exceptions.NoBooksInLibraryException;
 import com.libraryapp.services.LendingService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,16 +37,14 @@ public class LendingController {
     private static final String BOOK_NOT_LENT_TO_ANYONE = "В настоящее время книга с таким ISBN не выдана какому-либо клиенту.";
     private static final String BOOK_NOT_LENT_TO_CLIENT = "Книга с таким ISBN не выдана этому клиенту.";
     private static final String BOOK_ALREADY_LENT_TO_CLIENT = "Книга с таким ISBN уже выдана этому клиенту.";
-    private static final String MAXIMUM_COPIES_LENT = "Превышено максимальное количество выданных копий книги.";
+    private static final String NO_COPIES_LEFT = "Превышено максимальное количество выданных копий книги.";
     private static final String NO_BOOKS_IN_LIBRARY = "В библиотеке не зарегистрировано ни одной книги.";
     private static final String BOOK_NOT_FOUND = "В библиотеке не зарегистрирована книга с таким ISBN.";
     private static final String CLIENT_NOT_FOUND = "В библиотеке не зарегистрирован клиент с таким читательским билетом.";
-    private static final String BOOK_SUCCESSFULLY_RETURNED = "Книга возвращена.";
+    private static final String BOOK_SUCCESSFULLY_RETURNED = "Книга успешно возвращена.";
 
     private final LendingService lendingService;
 
-    @Autowired
-    private LendingRecordMapper lendingRecordMapper;
 
     @GetMapping("books")
     @Operation(description = "Показать все книги, которые есть в библиотеке.")
@@ -97,20 +94,20 @@ public class LendingController {
         }
 
         if(book.getMaxCopies() - book.getLentCopies() <= 0) {
-            throw new MaximumCopiesLentException(MAXIMUM_COPIES_LENT);
+            throw new NoCopiesLeftException(NO_COPIES_LEFT);
         }
 
-        LendingRecord lendingRecord =  lendingService.createLendingRecord(book, client, lendingTerm);
+        LendingRecordDTO lendingRecordDTO =  lendingService.createLendingRecord(book, client, lendingTerm);
         lendingService.updateLentCopies(book.getLentCopies() + 1, book.getIsbn());
 
-        return new ResponseEntity<>(lendingRecordMapper.lendingRecordToLendingRecordDTO(lendingRecord), HttpStatus.OK);
+        return new ResponseEntity<>(lendingRecordDTO, HttpStatus.OK);
 
     }
 
 
     @DeleteMapping("return-book")
-    public ResponseEntity<String> returnBook(@RequestParam String isbn,
-                                             @RequestParam String libraryCard) {
+    public ResponseEntity<ReturnBookResponse> returnBook(@RequestParam String isbn,
+                                                         @RequestParam String libraryCard) {
 
         if (lendingService.getClientByLibraryCard(libraryCard).isEmpty()) {
             throw new ClientNotFoundException(CLIENT_NOT_FOUND);
@@ -124,8 +121,8 @@ public class LendingController {
 
         lendingService.deleteById(lendingRecord.getId());
         lendingService.updateLentCopies(book.getLentCopies() - 1, book.getIsbn());
-        return new ResponseEntity<>(BOOK_SUCCESSFULLY_RETURNED, HttpStatus.OK);
 
+        return new ResponseEntity<>(new ReturnBookResponse(BOOK_SUCCESSFULLY_RETURNED), HttpStatus.OK);
     }
 
 }

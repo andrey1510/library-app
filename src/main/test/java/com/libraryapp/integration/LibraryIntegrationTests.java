@@ -20,9 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class LibraryIntegrationTests {
 
-    @LocalServerPort
-    private int port;
-
     private final String uri = "http://localhost:8080/api/v1/lending/";
 
     @Autowired
@@ -30,18 +27,19 @@ class LibraryIntegrationTests {
 
     @Test
     void getAllBooksTest() {
+        String isbn = "1 isbn";
+
         ResponseEntity<List<BookDTO>> responseEntity = restTemplate.exchange(
                 uri + "books",
                 HttpMethod.GET,
                 null, new ParameterizedTypeReference<>() {});
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("1 isbn", responseEntity.getBody().stream().findFirst().orElseThrow().getIsbn());
+        assertEquals(isbn, responseEntity.getBody().stream().findFirst().orElseThrow().getIsbn());
     }
 
     @Test
     void lendBookTest() {
-
         String isbn = "1 isbn";
         String libraryCard = "1 lc";
         Integer lendingTerm = 10;
@@ -56,7 +54,6 @@ class LibraryIntegrationTests {
 
     @Test
     void returnBookTest() {
-
         String isbn = "2 isbn";
         String libraryCard = "2 lc";
         Integer lendingTerm = 5;
@@ -77,7 +74,6 @@ class LibraryIntegrationTests {
 
     @Test
     void getClientByIsbnTest() {
-
         String isbn = "3 isbn";
         String libraryCard = "3 lc";
         Integer lendingTerm = 10;
@@ -96,7 +92,6 @@ class LibraryIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntityGet.getStatusCode());
         assertEquals(libraryCard, responseEntityGet.getBody().stream().findFirst().orElseThrow().getLibraryCard());
-
     }
 
 }

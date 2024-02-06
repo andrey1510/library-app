@@ -2,8 +2,10 @@ package com.libraryapp.services;
 
 import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.dto.LendingRecordDTO;
 import com.libraryapp.mappers.BookMapper;
 import com.libraryapp.mappers.ClientMapper;
+import com.libraryapp.mappers.LendingRecordMapper;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.LendingRecord;
 import com.libraryapp.models.Client;
@@ -32,7 +34,8 @@ public class LendingServiceImpl implements LendingService {
     private ClientMapper clientMapper;
     @Autowired
     private BookMapper bookMapper;
-
+    @Autowired
+    private LendingRecordMapper lendingRecordMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -70,8 +73,9 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     @Transactional
-    public LendingRecord createLendingRecord(Book book, Client client, Integer lendingTerm) {
-        return lendingRecordRepository.save(new LendingRecord(book, client, lendingTerm));
+    public LendingRecordDTO createLendingRecord(Book book, Client client, Integer lendingTerm) {
+        LendingRecord lendingRecord = lendingRecordRepository.save(new LendingRecord(book, client, lendingTerm));
+        return lendingRecordMapper.lendingRecordToLendingRecordDTO(lendingRecord);
     }
 
     @Override

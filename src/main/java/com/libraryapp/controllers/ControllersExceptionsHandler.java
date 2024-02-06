@@ -5,7 +5,7 @@ import com.libraryapp.exceptions.BookNotFoundException;
 import com.libraryapp.exceptions.BookNotLentToAnyoneException;
 import com.libraryapp.exceptions.BookNotLentToClientException;
 import com.libraryapp.exceptions.ClientNotFoundException;
-import com.libraryapp.exceptions.MaximumCopiesLentException;
+import com.libraryapp.exceptions.NoCopiesLeftException;
 import com.libraryapp.exceptions.NoBooksInLibraryException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -28,10 +28,10 @@ public class ControllersExceptionsHandler {
         return new ErrorResponse(ex.getMessage());
     }
 
-    @ExceptionHandler(MaximumCopiesLentException.class)
+    @ExceptionHandler(NoCopiesLeftException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorResponse handleMaximumCopiesLentException(MaximumCopiesLentException ex) {
+    public ErrorResponse handleMaximumCopiesLentException(NoCopiesLeftException ex) {
         return new ErrorResponse(ex.getMessage());
     }
 

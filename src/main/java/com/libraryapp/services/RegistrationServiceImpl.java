@@ -1,5 +1,9 @@
 package com.libraryapp.services;
 
+import com.libraryapp.dto.BookDTO;
+import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.mappers.BookMapper;
+import com.libraryapp.mappers.ClientMapper;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.Client;
 import com.libraryapp.repositories.BookRepository;
@@ -17,15 +21,21 @@ public class RegistrationServiceImpl implements RegistrationService{
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private BookMapper bookMapper;
+    @Autowired
+    private ClientMapper clientMapper;
+
+
     @Override
     @Transactional
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public Book createBook(BookDTO bookDTO) {
+        return bookRepository.save(bookMapper.bookDTOToBook(bookDTO));
     }
 
     @Override
     @Transactional
-    public Client createClient(Client client) {
-        return clientRepository.save(client);
+    public Client createClient(ClientDTO clientDTO) {
+        return clientRepository.save(clientMapper.clientDTOToClient(clientDTO));
     }
 }

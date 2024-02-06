@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,17 +55,19 @@ public class Book {
     @NotNull
     @Column(name = "publication_date", nullable = false)
     @Schema(requiredMode = REQUIRED,
-            example = "2023-02-25T21:19:51.223Z",
+            example = "2023-02-25",
             description = "ФИО клиента.")
-    private Date publicationDate;
+    private LocalDate publicationDate;
 
+    @NotNull
     @Column(name = "max_copies", columnDefinition = "integer default 10")
     @Schema(requiredMode = REQUIRED,
             example = "10",
             description = "Максимальное количество копий книги, которое можно выдавать.")
     private int maxCopies;
 
-    @Column(name = "lent_copies")
+    @NotNull
+    @Column(name = "lent_copies", columnDefinition = "integer default 0")
     @Schema(requiredMode = REQUIRED,
             example = "0",
             description = "Максимальное количество выданных клиентам копий книги.")

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
@@ -39,9 +40,9 @@ public class BookDTO {
 
     @NotNull
     @Schema(requiredMode = REQUIRED,
-            example = "2023-02-25T21:19:51.223Z",
+            example = "2023-02-25",
             description = "ФИО клиента.")
-    private Date publicationDate;
+    private LocalDate publicationDate;
 
     @Schema(requiredMode = REQUIRED,
             example = "1",

@@ -2,6 +2,7 @@ package com.libraryapp.services;
 
 import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
+import com.libraryapp.dto.LendingRecordDTO;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.LendingRecord;
 import com.libraryapp.models.Client;
@@ -24,7 +25,7 @@ public interface LendingService {
     Optional<LendingRecord> getLendingRecordByIsbnAndLibraryCard(String isbn, String libraryCard);
 
     @Transactional
-    LendingRecord createLendingRecord(Book book, Client client, Integer lendingTerm);
+    LendingRecordDTO createLendingRecord(Book book, Client client, Integer lendingTerm);
 
     @Transactional
     void deleteById(Long id);
