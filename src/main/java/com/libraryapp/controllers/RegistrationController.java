@@ -2,14 +2,11 @@ package com.libraryapp.controllers;
 
 import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
-import com.libraryapp.mappers.BookMapper;
-import com.libraryapp.mappers.ClientMapper;
 import com.libraryapp.models.Book;
 import com.libraryapp.models.Client;
 import com.libraryapp.services.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

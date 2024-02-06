@@ -1,16 +1,15 @@
 package com.libraryapp.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -33,9 +32,10 @@ public class LendingRecordDTO {
             description = "Номер библиотечной карточки клиента.")
     private String libraryCard;
 
+    @NotNull
+    @Column(name = "timestamp", nullable = false)
     @Schema(requiredMode = REQUIRED,
-            example = "10",
-            description = "Количество дней, на которое выдается книга.")
-    private Integer lendingTerm;
+            description = "Дата и время окончания срока выдачи книги.")
+    private Timestamp lendingTerm;
 
 }

@@ -97,7 +97,7 @@ public class LendingController {
             throw new NoCopiesLeftException(NO_COPIES_LEFT);
         }
 
-        LendingRecordDTO lendingRecordDTO =  lendingService.createLendingRecord(book, client, lendingTerm);
+        LendingRecordDTO lendingRecordDTO = lendingService.createLendingRecord(book, client, lendingTerm);
         lendingService.updateLentCopies(book.getLentCopies() + 1, book.getIsbn());
 
         return new ResponseEntity<>(lendingRecordDTO, HttpStatus.OK);

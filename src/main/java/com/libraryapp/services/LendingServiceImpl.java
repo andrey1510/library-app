@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.libraryapp.utilities.LendingTermGenerator.generateLendingTerm;
+
 @Service
 public class LendingServiceImpl implements LendingService {
 
@@ -74,7 +76,7 @@ public class LendingServiceImpl implements LendingService {
     @Override
     @Transactional
     public LendingRecordDTO createLendingRecord(Book book, Client client, Integer lendingTerm) {
-        LendingRecord lendingRecord = lendingRecordRepository.save(new LendingRecord(book, client, lendingTerm));
+        LendingRecord lendingRecord = lendingRecordRepository.save(new LendingRecord(book, client, generateLendingTerm(lendingTerm)));
         return lendingRecordMapper.lendingRecordToLendingRecordDTO(lendingRecord);
     }
 

@@ -8,8 +8,8 @@ import com.libraryapp.models.Client;
 import com.libraryapp.models.LendingRecord;
 import lombok.Getter;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -83,10 +83,10 @@ public abstract class TestData {
 
 
     protected Optional<LendingRecord> createLendingRecord() {
-        return Optional.of(new LendingRecord(createBook().orElseThrow(), createClient().orElseThrow(), 20));
+        return Optional.of(new LendingRecord(createBook().orElseThrow(), createClient().orElseThrow()));
     }
 
     protected LendingRecordDTO createLendingRecordDTO() {
-        return new LendingRecordDTO("1 isbn", "1 lc", 20);
+        return new LendingRecordDTO("1 isbn", "1 lc", Timestamp.valueOf("2024-02-06 23:49:20.568"));
     }
 }

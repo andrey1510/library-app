@@ -1,5 +1,6 @@
 package com.libraryapp.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,12 +11,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -42,19 +43,21 @@ public class LendingRecord {
     @JoinColumn(name="library_card")
     private Client client;
 
+    @NotNull
     @Column(name = "timestamp", nullable = false)
-    @CreationTimestamp
+    @Schema(description = "Дата и время окончания срока выдачи книги.")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp issuanceTimestamp;
-
-    @Column(name = "lending_term", columnDefinition = "integer default 30")
-    private Integer lendingTerm;
+    private Timestamp lendingTerm;
 
 
-    public LendingRecord(Book book, Client client, int lendingTerm) {
+    public LendingRecord(Book book, Client client) {
+        this.book = book;
+        this.client = client;
+    }
+
+    public LendingRecord(Book book, Client client, Timestamp lendingTerm) {
         this.book = book;
         this.client = client;
         this.lendingTerm = lendingTerm;
     }
-
 }

@@ -16,3 +16,9 @@ springdoc:
   swagger-ui:
     enabled: true
     filter: true
+
+scheduler:
+  lendingTerm:
+    daysBeforeLendingTermExpiry: 3
+    cron: "0 0 0 ** ?"
+#    "0 0/1 ** * ?"
