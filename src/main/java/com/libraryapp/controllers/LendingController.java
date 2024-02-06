@@ -42,7 +42,7 @@ public class LendingController {
     private static final String NO_BOOKS_IN_LIBRARY = "В библиотеке не зарегистрировано ни одной книги.";
     private static final String BOOK_NOT_FOUND = "В библиотеке не зарегистрирована книга с таким ISBN.";
     private static final String CLIENT_NOT_FOUND = "В библиотеке не зарегистрирован клиент с таким читательским билетом.";
-
+    private static final String BOOK_SUCCESSFULLY_RETURNED = "Книга возвращена.";
 
     private final LendingService lendingService;
 
@@ -71,7 +71,7 @@ public class LendingController {
             throw new BookNotFoundException(BOOK_NOT_FOUND);
         }
 
-        List<ClientDTO> clients = lendingService.getClientsByBookIsbn(isbn);
+        List<ClientDTO> clients = lendingService.getClientsByIsbn(isbn);
 
         if (clients.isEmpty()) {
             throw new BookNotLentToAnyoneException(BOOK_NOT_LENT_TO_ANYONE);
@@ -100,22 +100,17 @@ public class LendingController {
             throw new MaximumCopiesLentException(MAXIMUM_COPIES_LENT);
         }
 
-        LendingRecord lendingRecord = new LendingRecord(book, client, lendingTerm);
-
-        lendingService.createLendingRecord(lendingRecord);
+        LendingRecord lendingRecord =  lendingService.createLendingRecord(book, client, lendingTerm);
         lendingService.updateLentCopies(book.getLentCopies() + 1, book.getIsbn());
 
-        LendingRecordDTO lendingRecordDTO = lendingRecordMapper.lendingRecordToLendingRecordDTO(
-                lendingService.getLendingRecordByIsbnAndLibraryCard(isbn, libraryCard).orElseThrow());
-
-        return new ResponseEntity<>(lendingRecordDTO, HttpStatus.OK);
+        return new ResponseEntity<>(lendingRecordMapper.lendingRecordToLendingRecordDTO(lendingRecord), HttpStatus.OK);
 
     }
 
 
     @DeleteMapping("return-book")
     public ResponseEntity<String> returnBook(@RequestParam String isbn,
-                                                       @RequestParam String libraryCard) {
+                                             @RequestParam String libraryCard) {
 
         if (lendingService.getClientByLibraryCard(libraryCard).isEmpty()) {
             throw new ClientNotFoundException(CLIENT_NOT_FOUND);
@@ -129,7 +124,7 @@ public class LendingController {
 
         lendingService.deleteById(lendingRecord.getId());
         lendingService.updateLentCopies(book.getLentCopies() - 1, book.getIsbn());
-        return new ResponseEntity<>("Книга возвращена.", HttpStatus.OK);
+        return new ResponseEntity<>(BOOK_SUCCESSFULLY_RETURNED, HttpStatus.OK);
 
     }
 

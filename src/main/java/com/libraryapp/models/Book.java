@@ -1,13 +1,11 @@
 package com.libraryapp.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -56,7 +54,7 @@ public class Book {
     @NotNull
     @Column(name = "publication_date", nullable = false)
     @Schema(requiredMode = REQUIRED,
-            example = "01.08.2022",
+            example = "2023-02-25T21:19:51.223Z",
             description = "ФИО клиента.")
     private Date publicationDate;
 

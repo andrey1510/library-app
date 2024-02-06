@@ -24,6 +24,10 @@ public interface BookRepository extends JpaRepository<Book, String> {
             "order by " +
             "c.fullName asc ")
     List<Client> getClientsByBookIsbn(@Param("isbn") String isbn);
+
+
+
+
 //
 //    Book findByIsbn(String isbn);
 

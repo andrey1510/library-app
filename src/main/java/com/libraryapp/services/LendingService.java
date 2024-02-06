@@ -14,7 +14,7 @@ public interface LendingService {
 
     List<BookDTO> getAllBooks();
 
-    List<ClientDTO> getClientsByBookIsbn(String isbn);
+    List<ClientDTO> getClientsByIsbn(String isbn);
 
     Optional<Book> getBookByISBN(String isbn);
 
@@ -24,8 +24,7 @@ public interface LendingService {
     Optional<LendingRecord> getLendingRecordByIsbnAndLibraryCard(String isbn, String libraryCard);
 
     @Transactional
-    LendingRecord createLendingRecord(LendingRecord lendingRecord);
-
+    LendingRecord createLendingRecord(Book book, Client client, Integer lendingTerm);
 
     @Transactional
     void deleteById(Long id);

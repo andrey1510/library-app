@@ -1,7 +1,6 @@
 package com.libraryapp.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,7 +28,6 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 @Table(name = "client")
 public class Client {
 
-    //ToDo
     @NotNull
     @Id
     @Column(name = "library_card", nullable = false)

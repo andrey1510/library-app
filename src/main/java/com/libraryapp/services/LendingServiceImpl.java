@@ -37,18 +37,15 @@ public class LendingServiceImpl implements LendingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookDTO> getAllBooks() {
-        List<Book> allBooks = bookRepository.findAll();
-        return allBooks.stream().map(bookMapper::bookToBookDTO)
+        return bookRepository.findAll().stream()
+                .map(bookMapper::bookToBookDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClientDTO> getClientsByBookIsbn(String isbn) {
-
-        List<Client> clientsByBookIsbn = bookRepository.getClientsByBookIsbn(isbn);
-
-        return clientsByBookIsbn.stream()
+    public List<ClientDTO> getClientsByIsbn(String isbn) {
+        return clientRepository.findClientsByIsbn(isbn).stream()
                 .map(clientMapper::clientToClientDTO)
                 .collect(Collectors.toList());
     }
@@ -73,9 +70,10 @@ public class LendingServiceImpl implements LendingService {
 
     @Override
     @Transactional
-    public LendingRecord createLendingRecord(LendingRecord lendingRecord) {
-        return lendingRecordRepository.save(lendingRecord);
+    public LendingRecord createLendingRecord(Book book, Client client, Integer lendingTerm) {
+        return lendingRecordRepository.save(new LendingRecord(book, client, lendingTerm));
     }
+
     @Override
     @Transactional
     public void deleteById(Long id){

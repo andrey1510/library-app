@@ -18,7 +18,7 @@ public interface BookMapper {
     @Mapping(target = "isbn", source = "isbn")
     @Mapping(target = "author", source = "author")
     @Mapping(target = "publicationDate", source = "publicationDate")
-    @Mapping(target = "maxCopies", source = "maxCopies")
-    @Mapping(target = "lentCopies", source = "lentCopies")
+    @Mapping(target = "maxCopies", source = "maxCopies", defaultValue = "10")
+    @Mapping(target = "lentCopies", source = "lentCopies", defaultValue = "0")
     Book bookDTOToBook(BookDTO bookDTO);
 }
