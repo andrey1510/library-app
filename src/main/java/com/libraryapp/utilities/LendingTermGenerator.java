@@ -1,18 +1,12 @@
 package com.libraryapp.utilities;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class LendingTermGenerator {
 
-    public static Timestamp generateLendingTerm(Integer days){
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentTime);
-        calendar.add(Calendar.DAY_OF_MONTH, days);
-        return new Timestamp(calendar.getTime().getTime());
+    public static LocalDateTime generateLendingTerm(Integer days){
+        LocalDateTime currentTime = LocalDateTime.now();
+        return currentTime.plus(days, ChronoUnit.DAYS);
     }
 }

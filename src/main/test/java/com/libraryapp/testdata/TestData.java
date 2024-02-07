@@ -8,16 +8,14 @@ import com.libraryapp.models.Client;
 import com.libraryapp.models.LendingRecord;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Getter
 public abstract class TestData {
-
-    LocalDate date = LocalDate.parse("2022-02-25");
 
     protected List<BookDTO> createBookDTOlist() {
         List<BookDTO> testList = new ArrayList<>();
@@ -39,6 +37,17 @@ public abstract class TestData {
                 LocalDate.parse("2021-02-25"),
                 1,
                 0));
+        return testList;
+    }
+
+    protected List<LendingRecord> createLendingRecordlist() {
+        List<LendingRecord> testList = new ArrayList<>();
+        testList.add(new LendingRecord(createBook().orElseThrow(),
+                createClient().orElseThrow(),
+                LocalDateTime.now()));
+        testList.add(new LendingRecord(createBookNoCopiesLeft().orElseThrow(),
+                createClient().orElseThrow(),
+                LocalDateTime.now()));
         return testList;
     }
 
@@ -87,6 +96,6 @@ public abstract class TestData {
     }
 
     protected LendingRecordDTO createLendingRecordDTO() {
-        return new LendingRecordDTO("1 isbn", "1 lc", Timestamp.valueOf("2024-02-06 23:49:20.568"));
+        return new LendingRecordDTO("1 isbn", "1 lc", LocalDate.parse("2024-02-07"));
     }
 }

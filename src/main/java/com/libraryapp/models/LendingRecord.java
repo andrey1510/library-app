@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @NoArgsConstructor
@@ -44,10 +44,10 @@ public class LendingRecord {
     private Client client;
 
     @NotNull
-    @Column(name = "timestamp", nullable = false)
+    @Column(name = "lending_term", nullable = false)
     @Schema(description = "Дата и время окончания срока выдачи книги.")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lendingTerm;
+    private LocalDateTime lendingTerm;
 
 
     public LendingRecord(Book book, Client client) {
@@ -55,7 +55,7 @@ public class LendingRecord {
         this.client = client;
     }
 
-    public LendingRecord(Book book, Client client, Timestamp lendingTerm) {
+    public LendingRecord(Book book, Client client, LocalDateTime lendingTerm) {
         this.book = book;
         this.client = client;
         this.lendingTerm = lendingTerm;

@@ -5,6 +5,7 @@ import com.libraryapp.exceptions.BookNotFoundException;
 import com.libraryapp.exceptions.BookNotLentToAnyoneException;
 import com.libraryapp.exceptions.BookNotLentToClientException;
 import com.libraryapp.exceptions.ClientNotFoundException;
+import com.libraryapp.exceptions.NegativeLendingTermException;
 import com.libraryapp.exceptions.NoCopiesLeftException;
 import com.libraryapp.exceptions.NoBooksInLibraryException;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,7 +32,7 @@ public class ControllersExceptionsHandler {
     @ExceptionHandler(NoCopiesLeftException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorResponse handleMaximumCopiesLentException(NoCopiesLeftException ex) {
+    public ErrorResponse handleNoCopiesLeftException(NoCopiesLeftException ex) {
         return new ErrorResponse(ex.getMessage());
     }
 
@@ -70,11 +71,18 @@ public class ControllersExceptionsHandler {
         return new ErrorResponse(ex.getMessage());
     }
 
+    @ExceptionHandler(NegativeLendingTermException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse handleNegativeLendingTermException(NegativeLendingTermException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
 
     @AllArgsConstructor
     @Getter
     private static class ErrorResponse {
-        @Schema(description = "Сообщение об ошибке.", example = "В настоящее время эта книга не выдана какому-либо клиенту.")
+        @Schema(description = "Сообщение об ошибке.", example = "Описание ошибки.")
         private final String message;
     }
 

@@ -1,6 +1,7 @@
 package com.libraryapp.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -41,17 +41,19 @@ public class BookDTO {
     @NotNull
     @Schema(requiredMode = REQUIRED,
             example = "2023-02-25",
-            description = "ФИО клиента.")
+            description = "Дата публикации.")
     private LocalDate publicationDate;
 
+    @NotNull
     @Schema(requiredMode = REQUIRED,
             example = "1",
             description = "Максимальное количество копий книги, которое можно выдавать.")
-    private int maxCopies;
+    private Integer maxCopies;
 
+    @NotEmpty
     @Schema(requiredMode = REQUIRED,
             example = "0",
             description = "Максимальное количество выданных клиентам копий книги.")
-    private int lentCopies;
+    private Integer lentCopies;
 
 }

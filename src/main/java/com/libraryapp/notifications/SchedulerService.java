@@ -14,21 +14,25 @@ import java.util.stream.Collectors;
 import static com.libraryapp.utilities.LendingTermGenerator.generateLendingTerm;
 
 @Service
-public class NotificationServiceImpl {
+public class SchedulerService {
 
     @Autowired
     private LendingRecordRepository lendingRecordRepository;
     @Autowired
     private LendingRecordMapper lendingRecordMapper;
 
+    private NotificationStrategy notificationStrategy;
+
     @Value("${scheduler.lendingTerm.daysBeforeLendingTermExpiry}")
     private Integer daysBeforeLendingTermExpiry;
 
-    @Scheduled(cron = "${scheduler.lendingTerm.cron}")
-    public List<LendingRecordDTO> getLendingRecordsToReturn() {
-       return lendingRecordRepository.findLendingRecordsByLendingTermBefore(
-               generateLendingTerm(daysBeforeLendingTermExpiry)).stream()
+   // @Scheduled(cron = "${scheduler.lendingTerm.cron}")
+   @Scheduled(cron = "0/2 * * * * ?")
+    public void getLendingRecordsByLendingTermBefore() {
+        List<LendingRecordDTO> recordsForNotification = lendingRecordRepository
+                .findLendingRecordsByLendingTermBefore(generateLendingTerm(daysBeforeLendingTermExpiry)).stream()
                 .map(lendingRecordMapper::lendingRecordToLendingRecordDTO)
                 .collect(Collectors.toList());
+        notificationStrategy.sendNotification(recordsForNotification);
     }
 }

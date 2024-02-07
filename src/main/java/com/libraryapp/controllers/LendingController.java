@@ -3,6 +3,7 @@ package com.libraryapp.controllers;
 import com.libraryapp.dto.BookDTO;
 import com.libraryapp.dto.ClientDTO;
 import com.libraryapp.dto.LendingRecordDTO;
+import com.libraryapp.exceptions.NegativeLendingTermException;
 import com.libraryapp.exceptions.NoCopiesLeftException;
 import com.libraryapp.messages.ReturnBookResponse;
 import com.libraryapp.models.Book;
@@ -42,6 +43,7 @@ public class LendingController {
     private static final String BOOK_NOT_FOUND = "В библиотеке не зарегистрирована книга с таким ISBN.";
     private static final String CLIENT_NOT_FOUND = "В библиотеке не зарегистрирован клиент с таким читательским билетом.";
     private static final String BOOK_SUCCESSFULLY_RETURNED = "Книга успешно возвращена.";
+    private static final String NEGATIVE_LENDING_TERM = "Срок выдачи книги не может быть отрицательным.";
 
     private final LendingService lendingService;
 
@@ -82,7 +84,11 @@ public class LendingController {
     @Operation(description = "Выдать книгу клиенту.")
     public ResponseEntity<LendingRecordDTO> lendBook(@RequestParam String isbn,
                                                      @RequestParam String libraryCard,
-                                                     @RequestParam(required = false) Integer lendingTerm) {
+                                                     @RequestParam Integer lendingTerm) {
+
+        if(lendingTerm < 0 ) {
+            throw new NegativeLendingTermException(NEGATIVE_LENDING_TERM);
+        }
 
         Book book = lendingService.getBookByISBN(isbn)
                 .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND));

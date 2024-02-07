@@ -133,6 +133,21 @@ class LendingControllerTests extends TestData {
 
     @Test
     @SneakyThrows
+    void lendBookTestNegativeLendingTermException(){
+        String isbn = "1 isbn";
+        String libraryCard = "non-existent client";
+        Integer lendingTerm = -1;
+
+        this.mockMvc.perform(post(
+                        "/api/v1/lending/lend-book?isbn={isbn}&libraryCard={libraryCard}&lendingTerm={lendingTerm}",
+                        isbn, libraryCard, lendingTerm))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(
+                        "{\"message\":\"Срок выдачи книги не может быть отрицательным.\"}"));
+    }
+
+    @Test
+    @SneakyThrows
     void lendBookTestBookNotFoundException(){
         String isbn = "non-existent book";
         String libraryCard = "non-existent client";
