@@ -8,12 +8,13 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class NotificationStrategyEmail implements NotificationStrategy {
+public class NotificationEmailStrategy implements NotificationStrategy {
 
+    // stub for sending email notification
     @Override
     public void sendNotification(List<LendingRecordDTO> recordsForNotification){
         recordsForNotification.forEach(lendingRecord -> log.info(
-                "Клиенту с читательским билетом № {} нужно вернуть книгу с ISBN {} до {}.",
+                "Клиенту с читательским билетом № {} было послано электронное письмо о возврате книги с ISBN {} до {}.",
                 lendingRecord.getLibraryCard(), lendingRecord.getIsbn(), lendingRecord.getLendingTerm()));
     }
 

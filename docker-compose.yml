@@ -1,0 +1,12 @@
+services:
+
+  app:
+    container_name: library-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MAVEN_SKIP_TESTS=true
+    ports:
+      - 8080:8080
+    restart: unless-stopped

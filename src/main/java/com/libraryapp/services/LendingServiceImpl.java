@@ -76,7 +76,8 @@ public class LendingServiceImpl implements LendingService {
     @Override
     @Transactional
     public LendingRecordDTO createLendingRecord(Book book, Client client, Integer lendingTerm) {
-        LendingRecord lendingRecord = lendingRecordRepository.save(new LendingRecord(book, client, generateLendingTerm(lendingTerm)));
+        LendingRecord lendingRecord = lendingRecordRepository
+                .save(new LendingRecord(book, client, generateLendingTerm(lendingTerm)));
         return lendingRecordMapper.lendingRecordToLendingRecordDTO(lendingRecord);
     }
 

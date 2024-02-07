@@ -20,14 +20,13 @@ public class SchedulerService {
     private LendingRecordRepository lendingRecordRepository;
     @Autowired
     private LendingRecordMapper lendingRecordMapper;
-
+    @Autowired
     private NotificationStrategy notificationStrategy;
 
     @Value("${scheduler.lendingTerm.daysBeforeLendingTermExpiry}")
     private Integer daysBeforeLendingTermExpiry;
 
-   // @Scheduled(cron = "${scheduler.lendingTerm.cron}")
-   @Scheduled(cron = "0/2 * * * * ?")
+    @Scheduled(cron = "${scheduler.lendingTerm.cron}")
     public void getLendingRecordsByLendingTermBefore() {
         List<LendingRecordDTO> recordsForNotification = lendingRecordRepository
                 .findLendingRecordsByLendingTermBefore(generateLendingTerm(daysBeforeLendingTermExpiry)).stream()

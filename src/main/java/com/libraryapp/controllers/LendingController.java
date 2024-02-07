@@ -107,7 +107,6 @@ public class LendingController {
         lendingService.updateLentCopies(book.getLentCopies() + 1, book.getIsbn());
 
         return new ResponseEntity<>(lendingRecordDTO, HttpStatus.OK);
-
     }
 
 
