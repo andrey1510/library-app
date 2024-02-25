@@ -29,7 +29,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
 
 //
-//    Book findByIsbn(String isbn);
+//    com.libraryapp.Book findByIsbn(String isbn);
 
     @Modifying
     @Query("update Book b set b.lentCopies = :lentCopies where b.isbn = (select b.isbn from Book b where b.isbn = :isbn)" )
